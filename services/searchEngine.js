@@ -3,7 +3,7 @@ const apiClient = require('../services/apiClient');
 
 function doSearch(payload) {
     return apiClient.getHotels().then(function (hotels) {
-        const items = hotels.map(function (hotel) {
+        let items = hotels.map(function (hotel) {
             return {
                 title: hotel.name,
                 description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a vulputate tortor.',
@@ -16,6 +16,7 @@ function doSearch(payload) {
             };
         });
 
+        items = items.slice(0, 9);
         queue.add(payload.appUser._id, {
             type: 'text',
             text: 'These are the best rated hotels',

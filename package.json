@@ -21,6 +21,8 @@
     "express": "^4.15.3",
     "express-hbs": "^1.0.4",
     "luis-node-sdk": "^1.0.0",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4",
     "smooch-core": "^4.2.0"
   },
   "devDependencies": {

@@ -26,18 +26,16 @@ function askCity(payload) {
     apiClient.findCity(message.text).then(function (res) {
         cityData = res;
         queue.add(payload.appUser._id, {
-        type: 'text',
-        text: `What's the check-in date? Say something like “June 15”`,
-        role: 'appMaker'
-    });
+            type: 'text',
+            text: `What's the check-in date? Say something like “June 15”`,
+            role: 'appMaker'
+        });
     });
 
     return true;
 }
 
 function askCheckinDate(payload) {
-    const message = payload.messages[0];
-    checkin = message.text;
     queue.add(payload.appUser._id, {
         type: 'text',
         text: `When are you checking out? Say something like “June 15”`,
@@ -47,8 +45,6 @@ function askCheckinDate(payload) {
 }
 
 function askCheckoutDate(payload) {
-    const message = payload.messages[0];
-    checkout = message.text;
     searchEngine.doSearch(payload).then(() => {
         queue.add(payload.appUser._id, {
             type: 'text',
@@ -92,18 +88,39 @@ function askCheckoutDate(payload) {
             ]
         })
     });
-    
+
     queue.add(payload.appUser._id, {
         type: 'text',
-        text: `Great! Please spare me a moment. I’m looking for hotel options for ${ cityData.city } from ${ checkin } to ${ checkout }`,
+        text: `Great! Please spare me a moment. I’m looking for hotel options for ${cityData.city} from ${checkin} to ${checkout}`,
         role: 'appMaker'
     });
     return true;
 }
 
-module.exports = [
-    hello,
-    askCity,
-    askCheckinDate,
-    askCheckoutDate
-];
+function setCity(city) {
+    apiClient.findCity(city).then(function (res) {
+        cityData = res;
+    });
+}
+
+function setCheckinDate(date) {
+    checkin = date;
+}
+
+function setCheckoutDate(date) {
+    checkout = date;
+}
+
+module.exports = {
+    methods: {
+        setCity,
+        setCheckoutDate,
+        setCheckinDate
+    },
+    steps: [
+        hello,
+        askCity,
+        askCheckinDate,
+        askCheckoutDate
+    ]
+};

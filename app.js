@@ -32,18 +32,18 @@ var LUISclient = LUISClient({
   verbose: true
 });
 
-LUISclient.predict("Hotels in Las Vegas", {
+// LUISclient.predict("may 12", {
 
-  //On success of prediction
-  onSuccess: function (response) {
-    printOnSuccess(response);
-  },
+//   //On success of prediction
+//   onSuccess: function (response) {
+//     printOnSuccess(response);
+//   },
 
-  //On failure of prediction
-  onFailure: function (err) {
-    console.error(err);
-  }
-});
+//   //On failure of prediction
+//   onFailure: function (err) {
+//     console.error(err);
+//   }
+// });
 
 var printOnSuccess = function (response) {
   console.log("Query: " + response.query);
@@ -51,6 +51,7 @@ var printOnSuccess = function (response) {
   console.log("Entities:", response.entities);
   for (var i = 1; i <= response.entities.length; i++) {
     console.log(i + "- " + response.entities[i-1].entity);
+    // console.log(response.entities[i-1].resolution);
   }
   if (typeof response.dialog !== "undefined" && response.dialog !== null) {
     console.log("Dialog Status: " + response.dialog.status);
@@ -90,8 +91,42 @@ app.post('/messages', function (req, res) {
     const appUserId = req.body.appUser._id;
     // Call REST API to send message https://docs.smooch.io/rest/#post-message
     if (req.body.trigger === 'message:appUser') {
-        bookingDialog[step](req.body);
-        step = (step + 1) % bookingDialog.length;
+        LUISclient.predict(req.body.messages[0].text, {
+            //On success of prediction
+            onSuccess: function (response) {
+                console.log('Intent: ' + response.topScoringIntent.intent);
+
+                if (response.topScoringIntent.intent === 'None') {
+                    queue.add(req.body.appUser._id, {
+                        type: 'text',
+                        text: `Yikes! I didn’t quite understand that. You can say something like “find a hotel in Las Vegas”.`,
+                        role: 'appMaker'
+                    });
+                    return;  
+                }
+
+                if (response.topScoringIntent.intent === 'SearchHotel') {
+                    step = 1;
+                    bookingDialog.methods.setCity(response.entities[0].entity);   
+                }
+
+                if (response.topScoringIntent.intent === 'DefineDate') {
+                    if (step === 2) {
+                        bookingDialog.methods.setCheckinDate(response.entities[0].resolution.values[0].value);
+                    } else if (step === 3) {
+                        bookingDialog.methods.setCheckoutDate(response.entities[0].resolution.values[0].value);
+                    }
+                }
+
+                bookingDialog.steps[step](req.body);
+                step = (step + 1) % bookingDialog.steps.length;
+                printOnSuccess(response);
+            },
+            //On failure of prediction
+            onFailure: function (err) {
+                console.error(err);
+            }
+        });
     }
 
     if (req.body.trigger === 'postback') {
