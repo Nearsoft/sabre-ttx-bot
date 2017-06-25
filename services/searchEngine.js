@@ -5,11 +5,12 @@ let results = [];
 
 function doSearch(settings, payload) {
     return apiClient.getHotels(settings).then(function (hotels) {
+        console.log('RESULTS: ', hotels.length)
         let items = hotels.map(function (hotel, index) {
             return {
                 title: hotel.name,
                 description: '',
-                mediaUrl: hotel.image_url,
+                // mediaUrl: hotel.image_url,
                 phoneNumber: hotel.phone_number,
                 address: hotel.address,
                 price: hotel.price,
