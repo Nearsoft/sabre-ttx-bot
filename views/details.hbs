@@ -30,15 +30,15 @@
         </div>
         <div class="row">
             <div class="col-md-5 col-md-offset-1">
-                text 16
+                {{ hotel.address }}
             </div>
             <div class="col-md-6">
-                text 16
+                {{ hotel.phoneNumber }}
             </div>
         </div>
         <div class="row main-section">
             <div class="col-md-7 col-md-offset-1">
-                <img src="https://placeimg.com/640/480/arch/grayscale" alt="" style="width: 100%">
+                <img src="{{ hotel.mediaUrl }}" alt="" style="width: 100%">
             </div>
             <div class="col-md-3">
                 <h5><img class="rating-icon" src="/img/ratings/icon-rating-good.svg" alt="">h5</h5>

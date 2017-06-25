@@ -8,8 +8,10 @@ function doSearch(settings, payload) {
         let items = hotels.map(function (hotel, index) {
             return {
                 title: hotel.name,
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a vulputate tortor.',
-                mediaUrl: 'http://www.mysincityparty.com/wp-content/uploads/2-052113636163.jpg',
+                description: '',
+                mediaUrl: hotel.image_url,
+                phoneNumber: hotel.phone_number,
+                address: hotel.address,
                 actions: [{
                     text: 'More info',
                     type: 'link',
