@@ -12,23 +12,17 @@ const settings = {
     amenities: []
 };
 
-const KEY_ID = 'app_594efaff338749650022c62f';
-const SECRET = '4nWtUZO4FEb9l0vJPuW5K4ij';
-
 const smooch = new Smooch({
-    keyId: KEY_ID,
-    secret: SECRET,
+    keyId: process.env.SMOOCH_KEY_ID,
+    secret: process.env.SMOOCH_SECRET,
     scope: 'app'
 });
 
 const LUISClient = require("luis-node-sdk");
 
-const APPID = "fc9c6c7a-d8c9-4dea-aaa6-1f819ae0818b";
-const APPKEY = "779f841f270443f8a3454af60d58e8a4";
-
 var LUISclient = LUISClient({
-  appId: APPID,
-  appKey: APPKEY,
+  appId: process.env.LUIS_APPID,
+  appKey: process.env.LUIS_APPKEY,
   verbose: true
 });
 
