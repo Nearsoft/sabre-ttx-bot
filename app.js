@@ -21,9 +21,9 @@ const smooch = new Smooch({
 const LUISClient = require("luis-node-sdk");
 
 var LUISclient = LUISClient({
-  appId: process.env.LUIS_APPID,
-  appKey: process.env.LUIS_APPKEY,
-  verbose: true
+    appId: process.env.LUIS_APPID,
+    appKey: process.env.LUIS_APPKEY,
+    verbose: true
 });
 
 // LUISclient.predict("may 12", {
@@ -40,20 +40,20 @@ var LUISclient = LUISClient({
 // });
 
 var printOnSuccess = function (response) {
-  console.log("Query: " + response.query);
-  console.log("Top Intent: " + response.topScoringIntent.intent);
-  console.log("Entities:", response.entities);
-  for (var i = 1; i <= response.entities.length; i++) {
-    console.log(i + "- " + response.entities[i-1].entity);
-    // console.log(response.entities[i-1].resolution);
-  }
-  if (typeof response.dialog !== "undefined" && response.dialog !== null) {
-    console.log("Dialog Status: " + response.dialog.status);
-    if(!response.dialog.isFinished()) {
-      console.log("Dialog Parameter Name: " + response.dialog.parameterName);
-      console.log("Dialog Prompt: " + response.dialog.prompt);
+    console.log("Query: " + response.query);
+    console.log("Top Intent: " + response.topScoringIntent.intent);
+    console.log("Entities:", response.entities);
+    for (var i = 1; i <= response.entities.length; i++) {
+        console.log(i + "- " + response.entities[i - 1].entity);
+        // console.log(response.entities[i-1].resolution);
     }
-  }
+    if (typeof response.dialog !== "undefined" && response.dialog !== null) {
+        console.log("Dialog Status: " + response.dialog.status);
+        if (!response.dialog.isFinished()) {
+            console.log("Dialog Parameter Name: " + response.dialog.parameterName);
+            console.log("Dialog Prompt: " + response.dialog.prompt);
+        }
+    }
 };
 
 const app = express();
@@ -62,7 +62,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'))
 
 app.engine('hbs', hbs.express4({
-  partialsDir: __dirname + '/views/partials'
+    partialsDir: __dirname + '/views/partials'
 }));
 app.set('view engine', 'hbs');
 app.set('views', __dirname + '/views');
@@ -73,7 +73,7 @@ app.get('/', function (req, res) {
 
 app.get('/hotels', function (req, res) {
     res.render('details', {
-      title: 'express-hbs example'
+        title: 'express-hbs example'
     });
 });
 
@@ -90,26 +90,32 @@ app.post('/messages', function (req, res) {
             onSuccess: function (response) {
                 console.log('Intent: ' + response.topScoringIntent.intent);
 
-                if (response.topScoringIntent.intent === 'None') {
-                    queue.add(req.body.appUser._id, {
-                        type: 'text',
-                        text: `Yikes! I didn’t quite understand that. You can say something like “find a hotel in Las Vegas”.`,
-                        role: 'appMaker'
-                    });
-                    return;  
-                }
-
-                if (response.topScoringIntent.intent === 'SearchHotel') {
-                    step = 1;
-                    bookingDialog.methods.setCity(response.entities[0].entity);   
-                }
-
-                if (response.topScoringIntent.intent === 'DefineDate') {
-                    if (step === 2) {
-                        bookingDialog.methods.setCheckinDate(response.entities[0].resolution.values[0].value);
-                    } else if (step === 3) {
-                        bookingDialog.methods.setCheckoutDate(response.entities[0].resolution.values[0].value);
-                    }
+                switch (response.topScoringIntent.intent) {
+                    case 'None':
+                        queue.add(req.body.appUser._id, {
+                            type: 'text',
+                            text: `Yikes! I didn’t quite understand that. You can say something like “find a hotel in Las Vegas”.`,
+                            role: 'appMaker'
+                        });
+                        return;
+                    case 'Greet':
+                        queue.add(req.body.appUser._id, {
+                            type: 'text',
+                            text: `Hi, ${ req.body.appUser.givenName }! I'm [botname] and I can help you to find the perfect hotel. Yes, with all the amenities you need. For fun, let’s give it a try.`,
+                            role: 'appMaker'
+                        });
+                        return;
+                    case 'SearchHotel':
+                        step = 1;
+                        bookingDialog.methods.setCity(response.entities[0].entity);
+                        break;
+                    case 'DefineDate':
+                        if (step === 2) {
+                            bookingDialog.methods.setCheckinDate(response.entities[0].resolution.values[0].value);
+                        } else if (step === 3) {
+                            bookingDialog.methods.setCheckoutDate(response.entities[0].resolution.values[0].value);
+                        }
+                        break;
                 }
 
                 bookingDialog.steps[step](req.body);
@@ -154,7 +160,7 @@ setInterval(function () {
             console.log('API ERROR:\n', err);
         });
     }
-}, 2000); 
+}, 2000);
 
 app.listen(process.env.PORT || 3000, function () {
     console.log('Example app listening on port 3000!')
