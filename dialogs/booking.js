@@ -25,10 +25,9 @@ function hello(payload) {
 function askCity(payload) {
     const message = payload.messages[0];
     apiClient.findCity(message.text).then(function (res) {
-        cityData = res;
         queue.add(payload.appUser._id, {
             type: 'text',
-            text: `What's the check-in date? Say something like “June 15”`,
+            text: `When are you arriving?`,
             role: 'appMaker'
         });
     });
@@ -39,7 +38,7 @@ function askCity(payload) {
 function askCheckinDate(payload) {
     queue.add(payload.appUser._id, {
         type: 'text',
-        text: `When are you checking out? Say something like “June 15”`,
+        text: `When are you leaving?`,
         role: 'appMaker'
     });
     return true;
