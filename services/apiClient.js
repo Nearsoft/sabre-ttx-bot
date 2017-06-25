@@ -4,6 +4,7 @@ const baseUrl = process.env.API_BASE_URL
 function findCity(name) {
     return request.get(baseUrl + '/city_to_code?city=' + name).then(res => {
         res = JSON.parse(res);
+        console.log('CITY CODE', res[Object.keys(res)[0]]);
         return res[Object.keys(res)[0]];
     });
 }
