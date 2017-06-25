@@ -74,7 +74,7 @@ function askCheckoutDate(payload) {
                 items,
                 actions: [
                     {
-                        text: "I'm done!",
+                        text: "Select",
                         type: "postback",
                         payload: "EVENT:DONE_AMENITIES"
                     }
