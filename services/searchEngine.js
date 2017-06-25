@@ -35,6 +35,11 @@ function doSearch(settings, payload) {
     });
 }
 
+function getResult(index) {
+    return results[index];
+}
+
 module.exports = {
-    doSearch
+    doSearch, 
+    getResult
 }

@@ -71,9 +71,10 @@ app.get('/', function (req, res) {
     res.send('Hello World!')
 });
 
-app.get('/hotels', function (req, res) {
+app.get('/hotels/{index}', function (req, res) {
+    console.log('/hotels/{index}', searchEngine.getResult(index));
     res.render('details', {
-        title: 'express-hbs example'
+        hotel: searchEngine.getResult(index)
     });
 });
 
