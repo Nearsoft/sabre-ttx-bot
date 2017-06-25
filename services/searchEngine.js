@@ -1,6 +1,8 @@
 const queue = require('../services/messagesWorker');
 const apiClient = require('../services/apiClient');
 
+let results = [];
+
 function doSearch(settings, payload) {
     return apiClient.getHotels(settings).then(function (hotels) {
         let items = hotels.map(function (hotel) {
@@ -17,6 +19,8 @@ function doSearch(settings, payload) {
         });
 
         items = items.slice(0, 9);
+        results = items;
+
         queue.add(payload.appUser._id, {
             type: 'text',
             text: 'These are the best rated hotels',

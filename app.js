@@ -106,6 +106,9 @@ app.post('/messages', function (req, res) {
                         });
                         return;
                     case 'SearchHotel':
+                        if (!response.entities.length) {
+                            return;
+                        }
                         step = 1;
                         bookingDialog.methods.setCity(response.entities[0].entity);
                         break;
