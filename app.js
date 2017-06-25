@@ -21,6 +21,46 @@ const smooch = new Smooch({
     scope: 'app'
 });
 
+const LUISClient = require("luis-node-sdk");
+
+const APPID = "fc9c6c7a-d8c9-4dea-aaa6-1f819ae0818b";
+const APPKEY = "779f841f270443f8a3454af60d58e8a4";
+
+var LUISclient = LUISClient({
+  appId: APPID,
+  appKey: APPKEY,
+  verbose: true
+});
+
+LUISclient.predict("Hotels in Las Vegas", {
+
+  //On success of prediction
+  onSuccess: function (response) {
+    printOnSuccess(response);
+  },
+
+  //On failure of prediction
+  onFailure: function (err) {
+    console.error(err);
+  }
+});
+
+var printOnSuccess = function (response) {
+  console.log("Query: " + response.query);
+  console.log("Top Intent: " + response.topScoringIntent.intent);
+  console.log("Entities:", response.entities);
+  for (var i = 1; i <= response.entities.length; i++) {
+    console.log(i + "- " + response.entities[i-1].entity);
+  }
+  if (typeof response.dialog !== "undefined" && response.dialog !== null) {
+    console.log("Dialog Status: " + response.dialog.status);
+    if(!response.dialog.isFinished()) {
+      console.log("Dialog Parameter Name: " + response.dialog.parameterName);
+      console.log("Dialog Prompt: " + response.dialog.prompt);
+    }
+  }
+};
+
 const app = express();
 
 app.use(bodyParser.json());

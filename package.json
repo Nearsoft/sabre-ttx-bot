@@ -20,6 +20,7 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "express-hbs": "^1.0.4",
+    "luis-node-sdk": "^1.0.0",
     "smooch-core": "^4.2.0"
   },
   "devDependencies": {

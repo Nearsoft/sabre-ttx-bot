@@ -38,12 +38,39 @@ h5 {
     line-height: 22px;
 }
 
+.main-section {
+    max-height: 480px;
+    overflow: hidden;
+}
+
+.main-section .call-to-action {
+    display: block;
+    height: 215px;
+    background-color: #F2F3FF;
+    padding: 20px;
+    text-align: center;
+}
+
+.call-to-action-button {
+    display: inline-block;
+    padding: 10px;
+    color: #FAFAFA;
+	border-radius: 10px;
+	background-color: #933031;
+}
+
 .params-container {
+    padding: 13px;
+    margin-bottom: 10px;
 	display: block;
     width: 100%;
 	border: 1px solid #CCCCCC;
 	border-radius: 10px;
 	background-color: #FFFFFF;
+	color: #172B4D;
+	font-family: Helvetica;
+	font-size: 16px;
+	font-weight: bold;
 }
 
 .text-12 {
@@ -51,4 +78,31 @@ h5 {
 	font-family: Helvetica;
 	font-size: 12px;
 	line-height: 14px;
+}
+
+.main-amenities {
+    height: 60px;
+    width: 60px;
+    margin-right: 10px; 
+}
+
+.amenity {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.amenity-icon {
+    height: 50px;
+    width: 50px;
+    flex: 0;
+    margin-right: 10px;
+}
+
+.amenity-name {
+    flex: 1;
+}
+
+.rating-icon {
+    margin-right: 5px;
 }
