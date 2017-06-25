@@ -95,12 +95,12 @@ function setCity(city) {
     cityData = {
         city
     };
-    apiClient.findCity(city).then(function (res) {
-        if (res) {
-            console.log('CITY ASSIGNED', res);
-            cityData = res;
-        }
-    });
+    // apiClient.findCity(city).then(function (res) {
+    //     if (res) {
+    //         console.log('CITY ASSIGNED', res);
+    //         cityData = res;
+    //     }
+    // });
 }
 
 function setCheckinDate(date) {
