@@ -3,7 +3,7 @@ const queue = require('../services/messagesWorker');
 const searchEngine = require('../services/searchEngine');
 
 let userName = '';
-let cityData = '';
+let cityData = {};
 let checkin = '';
 let checkout = '';
 
@@ -92,15 +92,12 @@ function askCheckoutDate(payload) {
 }
 
 function setCity(city) {
-    cityData = {
-        city
-    };
-    // apiClient.findCity(city).then(function (res) {
-    //     if (res) {
-    //         console.log('CITY ASSIGNED', res);
-    //         cityData = res;
-    //     }
-    // });
+    apiClient.findCity(city).then(function (res) {
+        if (res) {
+            console.log('CITY ASSIGNED', res);
+            cityData = res;
+        }
+    });
 }
 
 function setCheckinDate(date) {

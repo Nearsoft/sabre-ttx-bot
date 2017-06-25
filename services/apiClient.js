@@ -13,7 +13,7 @@ function findCity(name) {
 }
 
 function getHotels(settings) {
-    const query = `/get_avail_hotels?check_in=${ settings.checkin }&check_out=${ settings.checkout }&city=${ settings.cityData.city }&rooms=1&guest=1&hotel_options=${ settings.amenities.join(',') }&room_options=${ settings.amenities.join(',') }`;
+    const query = `/get_avail_hotels?check_in=${ settings.checkin }&check_out=${ settings.checkout }&city=${ settings.cityData.iata }&rooms=1&guest=1&hotel_options=${ settings.amenities.join(',') }&room_options=${ settings.amenities.join(',') }`;
     console.log('QUERY SEARCH', query);
     return request.get(baseUrl + query ).then(res => {
         res = JSON.parse(res);
