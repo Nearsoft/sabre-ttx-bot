@@ -17,7 +17,16 @@ function getHotels(settings) {
     });
 }
 
+function getProfile(name) {
+    const query = `/get_profile?name=${ name }`;
+    return request.get(baseUrl + query ).then(res => {
+        res = JSON.parse(res);
+        return res;
+    });
+}
+
 module.exports = {
     findCity,
-    getHotels
+    getHotels,
+    getProfile
 };

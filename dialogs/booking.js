@@ -52,41 +52,34 @@ function askCheckoutDate(payload) {
             role: 'appMaker'
         });
 
-        queue.add(payload.appUser._id, {
-            role: "appMaker",
-            type: "list",
-            items: [
-                {
-                    title: "Free Wifi",
+        apiClient.getProfile('women').then(amenities => {
+            items = amenities.map(amenity => {
+                return {
+                    title: amenity,
                     size: "large",
                     actions: [
                         {
-                            text: "Free Wifi",
-                            type: "postback",
-                            payload: "EVENT:ADD_AMENITIES"
-                        }
-                    ]
-                },
-                {
-                    title: "Breakfast",
-                    size: "large",
-                    actions: [
-                        {
-                            text: "Breakfast",
+                            text: amenity,
                             type: "postback",
                             payload: "EVENT:ADD_AMENITIES"
                         }
                     ]
                 }
-            ],
-            actions: [
-                {
-                    text: "I'm done!",
-                    type: "postback",
-                    payload: "EVENT:DONE_AMENITIES"
-                }
-            ]
-        })
+            });
+
+            queue.add(payload.appUser._id, {
+                role: "appMaker",
+                type: "list",
+                items,
+                actions: [
+                    {
+                        text: "I'm done!",
+                        type: "postback",
+                        payload: "EVENT:DONE_AMENITIES"
+                    }
+                ]
+            });
+        });
     });
 
     queue.add(payload.appUser._id, {
