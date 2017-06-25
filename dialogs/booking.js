@@ -67,7 +67,7 @@ function askCheckoutDate(payload) {
                 }
             });
 
-            items = items.slice(0, 9);
+            items = items.slice(0, 3);
             queue.add(payload.appUser._id, {
                 role: "appMaker",
                 type: "list",
