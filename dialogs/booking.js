@@ -53,7 +53,7 @@ function askCheckoutDate(payload) {
         });
 
         apiClient.getProfile('women').then(amenities => {
-            items = amenities.map(amenity => {
+            let items = amenities.map(amenity => {
                 return {
                     title: amenity,
                     size: "large",
@@ -67,6 +67,7 @@ function askCheckoutDate(payload) {
                 }
             });
 
+            items = items.slice(0, 9);
             queue.add(payload.appUser._id, {
                 role: "appMaker",
                 type: "list",
