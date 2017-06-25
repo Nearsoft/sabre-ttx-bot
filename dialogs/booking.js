@@ -2,6 +2,7 @@ const apiClient = require('../services/apiClient');
 const queue = require('../services/messagesWorker');
 const searchEngine = require('../services/searchEngine');
 
+console.log('BookingDialog');
 let userName = '';
 let cityData = {};
 let checkin = '';
