@@ -138,7 +138,7 @@ app.post('/messages', function (req, res) {
         switch (req.body.postbacks[0].action.payload) {
             case 'EVENT:ADD_AMENITIES':
                 console.log('EVENT:ADD_AMENITIES');
-                settings.amenities.push(req.body.postbacks[0].text);
+                settings.amenities.push(req.body.postbacks[0].action.text);
                 break;
             case 'EVENT:DONE_AMENITIES':
                 console.log('EVENT:DONE_AMENITIES');
