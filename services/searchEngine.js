@@ -5,7 +5,7 @@ let results = [];
 
 function doSearch(settings, payload) {
     return apiClient.getHotels(settings).then(function (hotels) {
-        let items = hotels.map(function (hotel) {
+        let items = hotels.map(function (hotel, index) {
             return {
                 title: hotel.name,
                 description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a vulputate tortor.',
@@ -13,7 +13,7 @@ function doSearch(settings, payload) {
                 actions: [{
                     text: 'More info',
                     type: 'link',
-                    uri: 'http://example.org'
+                    uri: process.env.BASE_URL + '/hotels/' + index
                 }]
             };
         });
