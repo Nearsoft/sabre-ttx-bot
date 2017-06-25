@@ -12,6 +12,7 @@ function doSearch(settings, payload) {
                 mediaUrl: hotel.image_url,
                 phoneNumber: hotel.phone_number,
                 address: hotel.address,
+                price: hotel.price,
                 actions: [{
                     text: 'More info',
                     type: 'link',
