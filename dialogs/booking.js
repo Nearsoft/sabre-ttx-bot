@@ -55,7 +55,7 @@ function askCheckoutDate(payload) {
         apiClient.getProfile('women').then(amenities => {
             let items = amenities.map(amenity => {
                 return {
-                    title: amenity,
+                    title: 'Select:',
                     size: "large",
                     actions: [
                         {
@@ -74,7 +74,7 @@ function askCheckoutDate(payload) {
                 items,
                 actions: [
                     {
-                        text: "Select",
+                        text: "I'm done",
                         type: "postback",
                         payload: "EVENT:DONE_AMENITIES"
                     }
