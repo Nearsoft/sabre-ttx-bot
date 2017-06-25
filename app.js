@@ -143,7 +143,10 @@ app.post('/messages', function (req, res) {
                     text: `Great! I'm working to find the perfect hotel for you.`,
                     role: 'appMaker'
                 });
-                searchEngine.doSearch(req.body);
+
+                const searchSettings = bookingDialog.getSearchSettings();
+                searchSettings.amenities = settings.amenities;
+                searchEngine.doSearch(searchSettings, req.body);
                 break;
         }
     }

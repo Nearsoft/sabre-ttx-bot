@@ -45,7 +45,7 @@ function askCheckinDate(payload) {
 }
 
 function askCheckoutDate(payload) {
-    searchEngine.doSearch(payload).then(() => {
+    searchEngine.doSearch(getSearchSettings(), payload).then(() => {
         queue.add(payload.appUser._id, {
             type: 'text',
             text: 'Let’s refine these results! Please choose the amenities you prefer.',
@@ -111,11 +111,20 @@ function setCheckoutDate(date) {
     checkout = date;
 }
 
+function getSearchSettings() {
+    return {
+        cityData,
+        checkin,
+        checkout
+    }
+}
+
 module.exports = {
     methods: {
         setCity,
         setCheckoutDate,
-        setCheckinDate
+        setCheckinDate,
+        getSearchSettings
     },
     steps: [
         hello,

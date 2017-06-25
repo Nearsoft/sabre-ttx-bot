@@ -1,8 +1,8 @@
 const queue = require('../services/messagesWorker');
 const apiClient = require('../services/apiClient');
 
-function doSearch(payload) {
-    return apiClient.getHotels().then(function (hotels) {
+function doSearch(settings, payload) {
+    return apiClient.getHotels(settings).then(function (hotels) {
         let items = hotels.map(function (hotel) {
             return {
                 title: hotel.name,

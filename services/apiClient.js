@@ -8,8 +8,9 @@ function findCity(name) {
     });
 }
 
-function getHotels() {
-    return request.get(baseUrl + '/get_avail_hotels' ).then(res => {
+function getHotels(settings) {
+    const query = `/get_avail_hotels?check_in=${ settings.checkin }&check_out=${ settings.checkout }&city=${ settings.cityData.city }&rooms=1&guest=1&hotel_options=${ ''.join(',',settings.hotel_amenities) }&room_options=${ ''.join(',',settings.room_amenities) }`;
+    return request.get(baseUrl + query ).then(res => {
         res = JSON.parse(res);
         return res;
     });
