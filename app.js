@@ -144,7 +144,7 @@ app.post('/messages', function (req, res) {
                     role: 'appMaker'
                 });
 
-                const searchSettings = bookingDialog.getSearchSettings();
+                const searchSettings = bookingDialog.methods.getSearchSettings();
                 searchSettings.amenities = settings.amenities;
                 searchEngine.doSearch(searchSettings, req.body);
                 break;
