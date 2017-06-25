@@ -95,7 +95,9 @@ function setCity(city) {
         city
     };
     apiClient.findCity(city).then(function (res) {
-        cityData = res;
+        if (res) {
+            cityData = res;
+        }
     });
 }
 
