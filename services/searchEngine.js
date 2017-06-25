@@ -10,7 +10,7 @@ function doSearch(settings, payload) {
             return {
                 title: hotel.name,
                 description: '',
-                // mediaUrl: hotel.image_url,
+                mediaUrl: hotel.image_url,
                 phoneNumber: hotel.phone_number,
                 address: hotel.address,
                 price: hotel.price,
