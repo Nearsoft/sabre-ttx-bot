@@ -59,6 +59,10 @@ h5 {
 	background-color: #933031;
 }
 
+.call-to-action-button:hover {
+    color: #FAFAFA;
+}
+
 .params-container {
     padding: 13px;
     margin-bottom: 10px;
