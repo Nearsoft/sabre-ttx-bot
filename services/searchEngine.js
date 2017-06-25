@@ -1,0 +1,35 @@
+const queue = require('../services/messagesWorker');
+const apiClient = require('../services/apiClient');
+
+function doSearch(payload) {
+    return apiClient.getHotels().then(function (hotels) {
+        const items = hotels.map(function (hotel) {
+            return {
+                title: hotel.name,
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a vulputate tortor.',
+                mediaUrl: 'http://www.mysincityparty.com/wp-content/uploads/2-052113636163.jpg',
+                actions: [{
+                    text: 'More info',
+                    type: 'link',
+                    uri: 'http://example.org'
+                }]
+            };
+        });
+
+        queue.add(payload.appUser._id, {
+            type: 'text',
+            text: 'These are the best rated hotels',
+            role: 'appMaker'
+        });
+
+        queue.add(payload.appUser._id, {
+            role: 'appMaker',
+            type: 'carousel',
+            items
+        });
+    });
+}
+
+module.exports = {
+    doSearch
+}

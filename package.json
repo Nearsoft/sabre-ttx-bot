@@ -1,0 +1,28 @@
+{
+  "name": "sabre-ttx-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nearsoft/sabre-ttx-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nearsoft/sabre-ttx-bot/issues"
+  },
+  "homepage": "https://github.com/Nearsoft/sabre-ttx-bot#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "express-hbs": "^1.0.4",
+    "smooch-core": "^4.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
