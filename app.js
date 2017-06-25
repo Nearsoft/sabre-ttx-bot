@@ -72,7 +72,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/hotels/:index', function (req, res) {
-    console.log('/hotels/{index}', searchEngine.getResult(index));
+    console.log('/hotels/{index}', searchEngine.getResult(req.index));
     res.render('details', {
         hotel: searchEngine.getResult(index)
     });
