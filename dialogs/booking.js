@@ -115,7 +115,8 @@ function getSearchSettings() {
     return {
         cityData,
         checkin,
-        checkout
+        checkout,
+        amenities: []
     }
 }
 

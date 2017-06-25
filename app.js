@@ -101,7 +101,7 @@ app.post('/messages', function (req, res) {
                     case 'Greet':
                         queue.add(req.body.appUser._id, {
                             type: 'text',
-                            text: `Hi, ${ req.body.appUser.givenName }! I'm [botname] and I can help you to find the perfect hotel. Yes, with all the amenities you need. For fun, let’s give it a try.`,
+                            text: `Hi, ${ req.body.appUser.givenName }! I'm Sherpa and I can help you to find the perfect hotel. Yes, with all the amenities you need. For fun, let’s give it a try.`,
                             role: 'appMaker'
                         });
                         return;
