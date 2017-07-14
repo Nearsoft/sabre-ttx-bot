@@ -108,6 +108,7 @@ app.post('/messages', function (req, res) {
                         return;
                     case 'SearchHotel':
                         if (!response.entities.length) {
+                            console.log('No entities');
                             return;
                         }
                         step = 1;
