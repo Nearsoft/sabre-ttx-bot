@@ -89,6 +89,7 @@ app.post('/messages', function (req, res) {
         LUISclient.predict(req.body.messages[0].text, {
             //On success of prediction
             onSuccess: function (response) {
+                printOnSuccess(response);
                 console.log('Intent: ' + response.topScoringIntent.intent);
 
                 switch (response.topScoringIntent.intent) {
