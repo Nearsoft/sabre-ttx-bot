@@ -1,23 +1,49 @@
 const queue = require('../services/messagesWorker');
 const apiClient = require('../services/apiClient');
 
+var googleMapsClient = require('@google/maps').createClient({
+    key: process.env.GOOGLE_API_KEY
+});
+
 let results = [];
 
 function doSearch(settings, payload) {
-    return apiClient.getHotels(settings).then(function (hotels) {
-        console.log('RESULTS: ', hotels.length)
-        let items = hotels.map(function (hotel, index) {
-            return {
+    googleMapsClient.places({
+        query: 'hotel',
+        type: 'lodging'
+    }, (err, response) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        console.log(response.json.results[0]);
+        let items = response.json.results.map(function (hotel, index) {
+            console.log({
                 title: hotel.name,
                 description: '',
-                mediaUrl: hotel.image_url,
-                phoneNumber: hotel.phone_number,
-                address: hotel.address,
-                price: hotel.price,
+                mediaUrl: hotel.icon,
+                phoneNumber: '',
+                address: hotel.formatted_address,
+                price: '100',
                 actions: [{
                     text: 'More info',
                     type: 'link',
                     uri: process.env.BASE_URL + '/hotels/' + index
+                }]
+            });
+
+            return {
+                title: hotel.name,
+                description: '',
+                mediaUrl: hotel.icon,
+                phoneNumber: '231123123',
+                address: hotel.formatted_address,
+                price: 100.00,
+                actions: [{
+                    text: 'More info',
+                    type: 'link',
+                    uri: 'https://www.google.com.mx/search?q=' + hotel.name
                 }]
             };
         });
@@ -44,6 +70,6 @@ function getResult(index) {
 }
 
 module.exports = {
-    doSearch, 
+    doSearch,
     getResult
 }

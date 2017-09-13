@@ -4,9 +4,6 @@ const searchEngine = require('../services/searchEngine');
 
 console.log('BookingDialog');
 let userName = '';
-let cityData = {};
-let checkin = '';
-let checkout = '';
 
 function hello(payload) {
     const message = {
@@ -44,86 +41,17 @@ function askCheckinDate(payload) {
     return true;
 }
 
-function askCheckoutDate(payload) {
-    searchEngine.doSearch(getSearchSettings(), payload).then(() => {
-        queue.add(payload.appUser._id, {
-            type: 'text',
-            text: 'Let’s refine these results! Please choose the amenities you prefer.',
-            role: 'appMaker'
-        });
-
-        apiClient.getProfile('women').then(amenities => {
-            let items = amenities.map(amenity => {
-                return {
-                    title: 'Select:',
-                    size: "large",
-                    actions: [
-                        {
-                            text: amenity,
-                            type: "postback",
-                            payload: "EVENT:ADD_AMENITIES"
-                        }
-                    ]
-                }
-            });
-
-            items = items.slice(0, 3);
-            queue.add(payload.appUser._id, {
-                role: "appMaker",
-                type: "list",
-                items,
-                actions: [
-                    {
-                        text: "I'm done",
-                        type: "postback",
-                        payload: "EVENT:DONE_AMENITIES"
-                    }
-                ]
-            });
-        });
-    });
-
+function askCheckoutDate(payload, state) {
+    searchEngine.doSearch(state, payload);
     queue.add(payload.appUser._id, {
         type: 'text',
-        text: `Great! Please spare me a moment. I’m looking for hotel options for ${cityData.city} from ${checkin} to ${checkout}`,
+        text: `Great! Please spare me a moment. I’m looking for hotel options for ${state.locationName} from ${state.checkin} to ${state.checkout}`,
         role: 'appMaker'
     });
     return true;
 }
 
-function setCity(city) {
-    apiClient.findCity(city).then(function (res) {
-        if (res) {
-            console.log('CITY ASSIGNED', res);
-            cityData = res;
-        }
-    });
-}
-
-function setCheckinDate(date) {
-    checkin = date;
-}
-
-function setCheckoutDate(date) {
-    checkout = date;
-}
-
-function getSearchSettings() {
-    return {
-        cityData,
-        checkin,
-        checkout,
-        amenities: []
-    }
-}
-
 module.exports = {
-    methods: {
-        setCity,
-        setCheckoutDate,
-        setCheckinDate,
-        getSearchSettings
-    },
     steps: [
         hello,
         askCity,

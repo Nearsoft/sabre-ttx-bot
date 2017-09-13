@@ -7,7 +7,7 @@ const queue = require('./services/messagesWorker');
 const searchEngine = require('./services/searchEngine');
 
 const bookingDialog = require('./dialogs/booking');
-let step = 0;
+const conversations = [];
 const settings = {
     amenities: []
 };
@@ -16,6 +16,10 @@ const smooch = new Smooch({
     keyId: process.env.SMOOCH_KEY_ID,
     secret: process.env.SMOOCH_SECRET,
     scope: 'app'
+});
+
+var googleMapsClient = require('@google/maps').createClient({
+    key: process.env.GOOGLE_API_KEY
 });
 
 const LUISClient = require("luis-node-sdk");
@@ -86,6 +90,7 @@ app.post('/messages', function (req, res) {
     const appUserId = req.body.appUser._id;
     // Call REST API to send message https://docs.smooch.io/rest/#post-message
     if (req.body.trigger === 'message:appUser') {
+        const conversation = findConversation(appUserId);
         LUISclient.predict(req.body.messages[0].text, {
             //On success of prediction
             onSuccess: function (response) {
@@ -103,7 +108,7 @@ app.post('/messages', function (req, res) {
                     case 'Greet':
                         queue.add(req.body.appUser._id, {
                             type: 'text',
-                            text: `Hi, ${ req.body.appUser.givenName }! I'm Sherpa and I can help you to find the perfect hotel. Yes, with all the amenities you need. For fun, let’s give it a try.`,
+                            text: `Hi, ${req.body.appUser.givenName}! I'm Sherpa and I can help you to find the perfect hotel. Yes, with all the amenities you need. For fun, let’s give it a try.`,
                             role: 'appMaker'
                         });
                         return;
@@ -112,20 +117,30 @@ app.post('/messages', function (req, res) {
                             console.log('No entities');
                             return;
                         }
-                        step = 1;
-                        bookingDialog.methods.setCity(response.entities[0].entity);
+                        conversation.step = 1;
+                        conversation.data.locationName = response.entities[0].entity;
+                        googleMapsClient.geocode({
+                            address: conversation.data.locationName
+                        }, (err, response) => {
+                            if (err) {
+                                console.log(err);
+                                return;
+                            }
+                            console.log(response.json.results[0]);
+                            conversation.data.location = response.json.results[0].geometry.location;
+                        });
                         break;
                     case 'DefineDate':
-                        if (step === 2) {
-                            bookingDialog.methods.setCheckinDate(response.entities[0].resolution.values[0].value);
-                        } else if (step === 3) {
-                            bookingDialog.methods.setCheckoutDate(response.entities[0].resolution.values[0].value);
+                        if (conversation.step === 2) {
+                            conversation.data.checkin = response.entities[0].resolution.values[0].value;
+                        } else if (conversation.step === 3) {
+                            conversation.data.checout = response.entities[0].resolution.values[0].value;
                         }
                         break;
                 }
 
-                bookingDialog.steps[step](req.body);
-                step = (step + 1) % bookingDialog.steps.length;
+                bookingDialog.steps[conversation.step](req.body, conversation.data);
+                conversation.step = (conversation.step + 1) % bookingDialog.steps.length;
                 printOnSuccess(response);
             },
             //On failure of prediction
@@ -174,3 +189,24 @@ setInterval(function () {
 app.listen(process.env.PORT || 3000, function () {
     console.log('Example app listening on port 3000!')
 });
+
+function findConversation(userId) {
+    conversation = conversations.find(function (conversation) {
+        return conversation.userId === userId;
+    });
+
+    if (!conversation) {
+        conversation = createConversation(userId);
+        conversations.push(conversation);
+    }
+
+    return conversation;
+}
+
+function createConversation(userId) {
+    return {
+        userId,
+        step: 0,
+        data: {}
+    };
+}
