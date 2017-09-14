@@ -24,7 +24,7 @@ function doSearch(settings, payload) {
                 if (hotel.photos && hotel.photos.length) {
                     googleMapsClient.placesPhoto({
                         photoreference: hotel.photos[0].photo_reference,
-                        maxheight: 100
+                        maxwidth: 500
                     }, (err, response) => {
                         if (err) {
                             console.log(err.status);
