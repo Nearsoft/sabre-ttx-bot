@@ -20,7 +20,7 @@ function doSearch(settings, payload) {
         console.log(response.json.results[0]);
         let promises = response.json.results.map(function (hotel, index) {
             return new Promise((resolve, reject) => {
-                if (hotel.photos && hotel.photos.lenght) {
+                if (hotel.photos && hotel.photos.length) {
                     googleMapsClient.placesPhoto({
                         photoreference: hotel.photos[0].photo_reference,
                         maxheight: 100
