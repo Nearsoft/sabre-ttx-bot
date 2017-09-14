@@ -155,7 +155,7 @@ app.post('/messages', function (req, res) {
                         if (conversation.step === 2) {
                             conversation.data.checkin = response.entities[0].resolution.values[0].value;
                         } else if (conversation.step === 3) {
-                            conversation.data.checout = response.entities[0].resolution.values[0].value;
+                            conversation.data.checkout = response.entities[0].resolution.values[0].value;
                         }
                         break;
                 }

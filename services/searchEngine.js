@@ -33,7 +33,7 @@ function doSearch(settings, payload) {
 
                         resolve({
                             title: hotel.name,
-                            description: '',
+                            description: hotel.formatted_address,
                             mediaUrl: 'https://' + response.client._host + response.client.parser.outgoing.path,
                             phoneNumber: '231123123',
                             address: hotel.formatted_address,
@@ -41,14 +41,14 @@ function doSearch(settings, payload) {
                             actions: [{
                                 text: 'More info',
                                 type: 'link',
-                                uri: 'https://www.google.com.mx/search?q=' + hotel.name
+                                uri: 'https://www.google.com.mx/search?q=' + hotel.name + '#ahotel_dates=' + settings.checkin + ',7'
                             }]
                         });
                     });
                 } else {
                     resolve({
                             title: hotel.name,
-                            description: '',
+                            description: hotel.formatted_address,
                             mediaUrl: hotel.icon,
                             phoneNumber: '231123123',
                             address: hotel.formatted_address,
