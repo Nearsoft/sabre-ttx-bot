@@ -10,6 +10,7 @@ let results = [];
 function doSearch(settings, payload) {
     googleMapsClient.places({
         query: 'hotel',
+        location: settings.location,
         type: 'lodging'
     }, (err, response) => {
         if (err) {
