@@ -20,29 +20,45 @@ function doSearch(settings, payload) {
         console.log(response.json.results[0]);
         let promises = response.json.results.map(function (hotel, index) {
             return new Promise((resolve, reject) => {
-                googleMapsClient.placesPhoto({
-                    photoreference: hotel.photos[0].photo_reference,
-                    maxheight: 100
-                }, (err, response) => {
-                    if (err) {
-                        console.log(err.status);
-                        return;
-                    }
+                if (hotel.photos && hotel.photos.lenght) {
+                    googleMapsClient.placesPhoto({
+                        photoreference: hotel.photos[0].photo_reference,
+                        maxheight: 100
+                    }, (err, response) => {
+                        if (err) {
+                            console.log(err.status);
+                            return;
+                        }
 
-                    resolve({
-                        title: hotel.name,
-                        description: '',
-                        mediaUrl: 'https://' + response.client._host + response.client.parser.outgoing.path,
-                        phoneNumber: '231123123',
-                        address: hotel.formatted_address,
-                        price: 100.00,
-                        actions: [{
-                            text: 'More info',
-                            type: 'link',
-                            uri: 'https://www.google.com.mx/search?q=' + hotel.name
-                        }]
+                        resolve({
+                            title: hotel.name,
+                            description: '',
+                            mediaUrl: 'https://' + response.client._host + response.client.parser.outgoing.path,
+                            phoneNumber: '231123123',
+                            address: hotel.formatted_address,
+                            price: 100.00,
+                            actions: [{
+                                text: 'More info',
+                                type: 'link',
+                                uri: 'https://www.google.com.mx/search?q=' + hotel.name
+                            }]
+                        });
                     });
-                });
+                } else {
+                    resolve({
+                            title: hotel.name,
+                            description: '',
+                            mediaUrl: hotel.icon,
+                            phoneNumber: '231123123',
+                            address: hotel.formatted_address,
+                            price: 100.00,
+                            actions: [{
+                                text: 'More info',
+                                type: 'link',
+                                uri: 'https://www.google.com.mx/search?q=' + hotel.name
+                            }]
+                        });
+                }
             });
         });
 
