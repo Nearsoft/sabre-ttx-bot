@@ -18,50 +18,50 @@ function doSearch(settings, payload) {
         }
 
         console.log(response.json.results[0]);
-        let items = response.json.results.map(function (hotel, index) {
-            console.log({
-                title: hotel.name,
-                description: '',
-                mediaUrl: hotel.icon,
-                phoneNumber: '',
-                address: hotel.formatted_address,
-                price: '100',
-                actions: [{
-                    text: 'More info',
-                    type: 'link',
-                    uri: process.env.BASE_URL + '/hotels/' + index
-                }]
+        let promises = response.json.results.map(function (hotel, index) {
+            return new Promise((resolve, reject) => {
+                googleMapsClient.placesPhoto({
+                    photoreference: hotel.photos[0].photo_reference,
+                    maxheight: 100
+                }, (err, response) => {
+                    if (err) {
+                        console.log(err.status);
+                        return;
+                    }
+
+                    resolve({
+                        title: hotel.name,
+                        description: '',
+                        mediaUrl: 'https://' + response.client._host + response.client.parser.outgoing.path,
+                        phoneNumber: '231123123',
+                        address: hotel.formatted_address,
+                        price: 100.00,
+                        actions: [{
+                            text: 'More info',
+                            type: 'link',
+                            uri: 'https://www.google.com.mx/search?q=' + hotel.name
+                        }]
+                    });
+                });
+            });
+        });
+
+        Promise.all(promises).then(items => {
+            items = items.slice(0, 9);
+            results = items;
+
+            queue.add(payload.appUser._id, {
+                type: 'text',
+                text: 'These are the best rated hotels',
+                role: 'appMaker'
             });
 
-            return {
-                title: hotel.name,
-                description: '',
-                mediaUrl: hotel.icon,
-                phoneNumber: '231123123',
-                address: hotel.formatted_address,
-                price: 100.00,
-                actions: [{
-                    text: 'More info',
-                    type: 'link',
-                    uri: 'https://www.google.com.mx/search?q=' + hotel.name
-                }]
-            };
-        });
-
-        items = items.slice(0, 9);
-        results = items;
-
-        queue.add(payload.appUser._id, {
-            type: 'text',
-            text: 'These are the best rated hotels',
-            role: 'appMaker'
-        });
-
-        queue.add(payload.appUser._id, {
-            role: 'appMaker',
-            type: 'carousel',
-            items
-        });
+            queue.add(payload.appUser._id, {
+                role: 'appMaker',
+                type: 'carousel',
+                items
+            });
+        })
     });
 }
 

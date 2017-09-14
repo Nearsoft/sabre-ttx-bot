@@ -1,3 +1,4 @@
+var fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const Smooch = require('smooch-core');
@@ -81,6 +82,26 @@ app.get('/hotels/:index', function (req, res) {
         hotel: searchEngine.getResult(req.params.index)
     });
 });
+
+// app.get('/photos', function (req, res) {
+//     googleMapsClient.placesPhoto({
+//         photoreference: 'CnRvAAAAwMpdHeWlXl-lH0vp7lez4znKPIWSWvgvZFISdKx45AwJVP1Qp37YOrH7sqHMJ8C-vBDC546decipPHchJhHZL94RcTUfPa1jWzo-rSHaTlbNtjh-N68RkcToUCuY9v2HNpo5mziqkir37WU8FJEqVBIQ4k938TI3e7bf8xq-uwDZcxoUbO_ZJzPxremiQurAYzCTwRhE_V0',
+//         maxheight: 100
+//     }, (err, response) => {
+//         if (err) {
+//             console.log(err.status);
+//             return;
+//         }
+        
+//         res.send('https://' + response.client._host + response.client.parser.outgoing.path);
+//         // console.log();
+//         // console.log(response.client);
+//         // console.log();
+//         // console.log(response.httpVersion);
+//         // console.log(response.client);
+//         // res.send(response);
+//     });
+// })
 
 app.post('/messages', function (req, res) {
     // console.log('webhook PAYLOAD:\n', JSON.stringify(req.body, null, 4));
